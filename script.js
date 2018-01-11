@@ -20,7 +20,7 @@ $(document).ready(initializeApp);
  * ];
  */
 var student_array = [];
-var idCounter = 0;
+var idCounter;
 
 /***************************************************************************************************
 * initializeApp
@@ -42,6 +42,7 @@ function addClickHandlersToElements(){
     $('.add').click(handleAddClicked);
     $('.cancel').click(handleCancelClick);
     $('.student-list').on('click','.deleteButton', handleDeleteClick);
+    $('.data').click(handleDataClick);
 }
 
 /***************************************************************************************************
@@ -166,6 +167,48 @@ function handleDeleteClick() {
     $(this).parentsUntil('tbody').remove();
     var gradeToPush = calculateGradeAverage(student_array);
     renderGradeAverage(gradeToPush);
+}
+
+function handleDataClick() {
+    let dataFromServer;
+    let ajaxConfig = {
+        dataType: 'json',
+        data: {
+            api_key: 'mjzFvliPuy'
+        },
+        method: 'post',
+        url: 'https://s-apis.learningfuze.com/sgt/get',
+        success: function(data) {
+            dataFromServer = data;
+            console.log(dataFromServer);
+            for(let i = 0; i < dataFromServer.data.length; i++) {
+                let tableRow = $('<tr>');
+                let studentName = $('<td>').text(dataFromServer.data[i].name);
+                let studentCourse = $('<td>').text(dataFromServer.data[i].course);
+                let studentGrade = $('<td>').text(dataFromServer.data[i].grade);
+                let deleteTd = $('<td>');
+                let deleteButton = $('<button>').addClass('deleteButton btn btn-danger btn-sm').attr('id', dataFromServer.data[i].id).text('Delete');
+                deleteTd.append(deleteButton);
+                tableRow.append(studentName,studentCourse,studentGrade,deleteTd);
+                tableRow.appendTo('.student-list');
+                let dataObj = {
+                    name: dataFromServer.data[i].name,
+                    course: dataFromServer.data[i].course,
+                    grade: dataFromServer.data[i].grade,
+                    id: dataFromServer.data[i].id
+                };
+                idCounter = dataFromServer.data[i].id;
+                student_array.push(dataObj);
+                let gradeToPush = calculateGradeAverage(student_array);
+                renderGradeAverage(gradeToPush);
+            }
+            idCounter++;
+        },
+        error: function() {
+            console.log(false);
+        }
+    };
+    $.ajax(ajaxConfig);
 }
 
 
