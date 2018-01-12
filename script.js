@@ -20,7 +20,6 @@ $(document).ready(initializeApp);
  * ];
  */
 var student_array = [];
-var idCounter;
 
 /***************************************************************************************************
 * initializeApp
@@ -41,7 +40,6 @@ function initializeApp(){
 function addClickHandlersToElements(){
     $('.add').click(handleAddClicked);
     $('.cancel').click(handleCancelClick);
-    $('.student-list').on('click','.deleteButton', handleDeleteClick);
     $('.data').click(handleDataClick);
 }
 
@@ -73,12 +71,10 @@ function addStudent(){
     var studentName = $('#studentName').val();
     var studentCourse = $('#course').val();
     var studentGrade = $('#studentGrade').val();
-    var studentId = idCounter;
     var studentObject = {
         'name': studentName,
         'course': studentCourse,
         'grade': studentGrade,
-        'id': studentId
     };
     student_array.push(studentObject);
     clearAddStudentFormInputs();
@@ -97,18 +93,6 @@ function clearAddStudentFormInputs(){
  * into the .student_list tbody
  * @param {object} studentObj a single student object with course, name, and grade inside
  */
-function renderStudentOnDom(studentObj){
-    var tableRow = $('<tr>');
-    var studentName = $('<td>').text(studentObj.name);
-    var studentCourse = $('<td>').text(studentObj.course);
-    var studentGrade = $('<td>').text(studentObj.grade);
-    var deleteTd = $('<td>');
-    var deleteButton = $('<button>').addClass('deleteButton btn btn-danger btn-sm').attr('id', idCounter).text('Delete');
-    idCounter++;
-    deleteTd.append(deleteButton);
-    tableRow.append(studentName,studentCourse,studentGrade,deleteTd);
-    tableRow.appendTo('.student-list');
-}
 
 /***************************************************************************************************
  * updateStudentList - centralized function to update the average and call student list update
@@ -116,10 +100,35 @@ function renderStudentOnDom(studentObj){
  * @returns {undefined} none
  * @calls renderStudentOnDom, calculateGradeAverage, renderGradeAverage
  */
-function updateStudentList(){
-    renderStudentOnDom(student_array[student_array.length-1]);
-    var gradeToPush = calculateGradeAverage(student_array);
-    renderGradeAverage(gradeToPush);
+function updateStudentList(array){
+    $('tbody').empty();
+    for(let studentIndex = 0; studentIndex < array.length; studentIndex++) {
+        (function(studentIndex){
+            let studentArray = array[studentIndex];
+            let tableRow = $('<tr>');
+            let studentName = $('<td>').text(array[studentIndex].name);
+            let studentCourse = $('<td>').text(array[studentIndex].course);
+            let studentGrade = $('<td>').text(array[studentIndex].grade);
+            let deleteTd = $('<td>');
+            let deleteButton = $('<button>', {
+                'class': 'deleteButton btn btn-danger btn-sm',
+                'text': 'Delete',
+                on: {
+                    click: function() {
+                        student_array.splice(studentIndex, 1);
+                        let gradeToPush = calculateGradeAverage(student_array);
+                        renderGradeAverage(gradeToPush);
+                        updateStudentList(student_array);
+                    }
+                }
+            });
+            deleteTd.append(deleteButton);
+            tableRow.append(studentName,studentCourse,studentGrade,deleteTd);
+            tableRow.appendTo('.student-list');
+            let gradeToPush = calculateGradeAverage(student_array);
+            renderGradeAverage(gradeToPush);
+        })(studentIndex);
+    }
 }
 /***************************************************************************************************
  * calculateGradeAverage - loop through the global student array and calculate average grade and return that value
@@ -152,23 +161,6 @@ function renderGradeAverage(number){
     $('.avgGrade').text(number);
 }
 
-function deleteStudentObject() {
-    var buttonClicked = parseInt($(event.target).attr('id'));
-    for(var i = 0; i < student_array.length; i++) {
-        if(student_array[i].id === buttonClicked) {
-            student_array.splice(i,1);
-            break;
-        }
-    }
-}
-
-function handleDeleteClick() {
-    deleteStudentObject();
-    $(this).parentsUntil('tbody').remove();
-    var gradeToPush = calculateGradeAverage(student_array);
-    renderGradeAverage(gradeToPush);
-}
-
 function handleDataClick() {
     let dataFromServer;
     let ajaxConfig = {
@@ -180,29 +172,15 @@ function handleDataClick() {
         url: 'https://s-apis.learningfuze.com/sgt/get',
         success: function(data) {
             dataFromServer = data;
-            console.log(dataFromServer);
             for(let i = 0; i < dataFromServer.data.length; i++) {
-                let tableRow = $('<tr>');
-                let studentName = $('<td>').text(dataFromServer.data[i].name);
-                let studentCourse = $('<td>').text(dataFromServer.data[i].course);
-                let studentGrade = $('<td>').text(dataFromServer.data[i].grade);
-                let deleteTd = $('<td>');
-                let deleteButton = $('<button>').addClass('deleteButton btn btn-danger btn-sm').attr('id', dataFromServer.data[i].id).text('Delete');
-                deleteTd.append(deleteButton);
-                tableRow.append(studentName,studentCourse,studentGrade,deleteTd);
-                tableRow.appendTo('.student-list');
                 let dataObj = {
                     name: dataFromServer.data[i].name,
                     course: dataFromServer.data[i].course,
                     grade: dataFromServer.data[i].grade,
-                    id: dataFromServer.data[i].id
                 };
-                idCounter = dataFromServer.data[i].id;
                 student_array.push(dataObj);
-                let gradeToPush = calculateGradeAverage(student_array);
-                renderGradeAverage(gradeToPush);
+                updateStudentList(student_array);
             }
-            idCounter++;
         },
         error: function() {
             console.log(false);
