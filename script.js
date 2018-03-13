@@ -1,7 +1,3 @@
-/* information about jsdocs:
-* param: http://usejsdoc.org/tags-param.html#examples
-* returns: http://usejsdoc.org/tags-returns.html
-*
 /**
  * Listen for the document to load and initialize the application
  */
@@ -27,7 +23,7 @@ var student_array = [];
 * @returns: {undefined} none
 * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
 */
-function initializeApp(){
+function initializeApp() {
     addClickHandlersToElements();
 }
 
@@ -37,7 +33,7 @@ function initializeApp(){
 * @returns  {undefined}
 *
 */
-function addClickHandlersToElements(){
+function addClickHandlersToElements() {
     $('.add').click(handleAddClicked);
     $('.cancel').click(handleCancelClick);
     $('.data').click(handleDataClick);
@@ -49,7 +45,7 @@ function addClickHandlersToElements(){
  * @return:
        none
  */
-function handleAddClicked(){
+function handleAddClicked() {
     addStudent();
 }
 /***************************************************************************************************
@@ -58,7 +54,7 @@ function handleAddClicked(){
  * @returns: {undefined} none
  * @calls: clearAddStudentFormInputs
  */
-function handleCancelClick(){
+function handleCancelClick() {
     clearAddStudentFormInputs();
 }
 /***************************************************************************************************
@@ -67,7 +63,7 @@ function handleCancelClick(){
  * @return undefined
  * @calls clearAddStudentFormInputs, updateStudentList
  */
-function addStudent(){
+function addStudent() {
     var studentName = $('#studentName').val();
     var studentCourse = $('#course').val();
     var studentGrade = $('#studentGrade').val();
@@ -83,7 +79,7 @@ function addStudent(){
 /***************************************************************************************************
  * clearAddStudentForm - clears out the form values based on inputIds variable
  */
-function clearAddStudentFormInputs(){
+function clearAddStudentFormInputs() {
     $('#studentName').val('');
     $('#course').val('');
     $('#studentGrade').val('');
@@ -100,10 +96,10 @@ function clearAddStudentFormInputs(){
  * @returns {undefined} none
  * @calls renderStudentOnDom, calculateGradeAverage, renderGradeAverage
  */
-function updateStudentList(array){
+function updateStudentList(array) {
     $('tbody').empty();
-    for(let studentIndex = 0; studentIndex < array.length; studentIndex++) {
-        (function(studentIndex){
+    for (let studentIndex = 0; studentIndex < array.length; studentIndex++) {
+        (function (studentIndex) {
             let studentArray = array[studentIndex];
             let tableRow = $('<tr>');
             let studentName = $('<td>').text(array[studentIndex].name);
@@ -114,7 +110,7 @@ function updateStudentList(array){
                 'class': 'deleteButton btn btn-danger btn-sm',
                 'text': 'Delete',
                 on: {
-                    click: function() {
+                    click: function () {
                         student_array.splice(studentIndex, 1);
                         let gradeToPush = calculateGradeAverage(student_array);
                         renderGradeAverage(gradeToPush);
@@ -123,7 +119,7 @@ function updateStudentList(array){
                 }
             });
             deleteTd.append(deleteButton);
-            tableRow.append(studentName,studentCourse,studentGrade,deleteTd);
+            tableRow.append(studentName, studentCourse, studentGrade, deleteTd);
             tableRow.appendTo('.student-list');
             let gradeToPush = calculateGradeAverage(student_array);
             renderGradeAverage(gradeToPush);
@@ -135,17 +131,17 @@ function updateStudentList(array){
  * @param: {array} students  the array of student objects
  * @returns {number}
  */
-function calculateGradeAverage(array){
+function calculateGradeAverage(array) {
     var gradeAverage;
     var number = 0;
-    for(var i = 0; i < array.length; i++) {
-        if(array.length === 0) {
+    for (var i = 0; i < array.length; i++) {
+        if (array.length === 0) {
             gradeAverage = 0;
         } else {
             number += parseFloat(array[i].grade);
         }
     }
-    if(array.length > 0) {
+    if (array.length > 0) {
         gradeAverage = (number / array.length).toFixed(2);
     } else {
         gradeAverage = 0;
@@ -157,7 +153,7 @@ function calculateGradeAverage(array){
  * @param: {number} average    the grade average
  * @returns {undefined} none
  */
-function renderGradeAverage(number){
+function renderGradeAverage(number) {
     $('.avgGrade').text(number);
 }
 
@@ -170,9 +166,9 @@ function handleDataClick() {
         },
         method: 'post',
         url: 'https://s-apis.learningfuze.com/sgt/get',
-        success: function(data) {
+        success: function (data) {
             dataFromServer = data;
-            for(let i = 0; i < dataFromServer.data.length; i++) {
+            for (let i = 0; i < dataFromServer.data.length; i++) {
                 let dataObj = {
                     name: dataFromServer.data[i].name,
                     course: dataFromServer.data[i].course,
@@ -182,7 +178,7 @@ function handleDataClick() {
                 updateStudentList(student_array);
             }
         },
-        error: function() {
+        error: function () {
             console.log(false);
         }
     };
