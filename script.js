@@ -36,7 +36,7 @@ function initializeApp() {
 function addClickHandlersToElements() {
     $('.add').click(handleAddClicked);
     $('.cancel').click(handleCancelClick);
-    $('.data').click(handleDataClick);
+    $('.data').click(readStudentDatabase);
 }
 
 /***************************************************************************************************
@@ -72,6 +72,7 @@ function addStudent() {
         'course': studentCourse,
         'grade': studentGrade,
     };
+    addStudentToServer(studentObject);
     student_array.push(studentObject);
     clearAddStudentFormInputs();
     updateStudentList(student_array);
@@ -157,15 +158,49 @@ function renderGradeAverage(number) {
     $('.avgGrade').text(number);
 }
 
-function handleDataClick() {
+/***************************************************************************************************
+ * addStudentToServer - send post request to database to add student
+ * @param: {data} {api_key, action, name, course, grade}
+ * @returns {undefined} none
+ */
+function addStudentToServer(studentObject) {
     let dataFromServer;
     let ajaxConfig = {
         dataType: 'json',
         data: {
-            api_key: 'mjzFvliPuy'
+            api_key: 'mjzFvliPuy',
+            'action': 'create',
+            'name': studentObject.name,
+            'course': studentObject.course,
+            'grade': studentObject.grade
         },
         method: 'post',
-        url: 'https://s-apis.learningfuze.com/sgt/get',
+        url: 'phpBackend/access.php',
+        success: function (data) {
+            console.log('Successfully added new student');
+        },
+        error: function () {
+            console.log(false);
+        }
+    };
+    $.ajax(ajaxConfig);
+}
+
+/***************************************************************************************************
+ * readStudentDatabase - ajax request to get all students in database
+ * @param: {data} {api_key, action}
+ * @returns {data} list of all students from database
+ */
+function readStudentDatabase() {
+    let dataFromServer;
+    let ajaxConfig = {
+        dataType: 'json',
+        data: {
+            api_key: 'mjzFvliPuy',
+            'action': 'read'
+        },
+        method: 'post',
+        url: 'phpBackend/access.php',
         success: function (data) {
             dataFromServer = data;
             for (let i = 0; i < dataFromServer.data.length; i++) {
