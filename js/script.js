@@ -19,6 +19,7 @@ function initializeApp() {
     addClickHandlersToElements();
     handleFormCheck();
     handlePopover();
+    readStudentDatabase();
 }
 
 /***************************************************************************************************
@@ -292,9 +293,7 @@ function renderGradeAverage(number) {
  * @returns {undefined} none
  */
 function addStudentToServer(studentObject) {
-    console.log('studentObject.name: ', studentObject.name);
-    console.log('studentObject.course: ', studentObject.course);
-    console.log('studentObject.grade: ', studentObject.grade);
+    $('tbody').empty();
     $.ajax({
         dataType: 'json',
         method: 'post',
@@ -328,6 +327,8 @@ function addStudentToServer(studentObject) {
  * @returns {data} list of all students from database
  */
 function readStudentDatabase() {
+    $('tbody').empty();
+    $(".data").attr("disabled", true);
     $.ajax({
         dataType: 'json',
         data: {
@@ -336,7 +337,7 @@ function readStudentDatabase() {
         method: 'post',
         url: 'phpBackend/access.php',
         success: function (data) {
-            console.log('data: ', data);
+            student_array.length = 0;
             for (let i = 0; i < data.data.length; i++) {
                 let dataObj = {
                     name: data.data[i].name,
@@ -346,8 +347,8 @@ function readStudentDatabase() {
                 };
                 student_array.push(dataObj);
             }
-            $('.noStudentData').remove();
             updateStudentList(student_array);
+            $(".data").attr("disabled", false);
         },
         error: function (error) {
             console.log('error: ', error.statusText);
