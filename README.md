@@ -6,8 +6,8 @@
 - Deployed a PHP back-end that uses mysqli prepared statements to safely interface with the database.
 
 ![Landing Page](images/SGT.png)
-:-------------------------:|:-------------------------:
-![Delete Modal](images/deleteModal.png) | ![Error Handling](images/errorhandling.png)
+![Delete Modal](images/deleteModal.png) 
+![Error Handling](images/errorhandling.png)
 
 
 ## Technologies Used
