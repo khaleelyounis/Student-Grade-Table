@@ -1,68 +1,125 @@
 <!doctype html>
 <html>
-    <head>
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="script.js"></script>
-        <meta name="viewport" content="initial-scale=1, user-scalable=no">
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <!-- only show this element when the isnt on mobile -->
-                    <h1 class="hidden-sm hidden-xs"> Student Grade Table
-                        <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
-                        <hr>
-                    </h1>
-                     <!--only show this element when the user gets to a mobile version-->
-                    <h3 class="hidden-md hidden-lg hidden-xl col-xs-12">Student Grade Table
-                        <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
-                        <hr>
-                    </h3>
-                </div>
+
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="initial-scale=1, user-scalable=no">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- only show this element when the isnt on mobile -->
+                <h1 class="hidden-sm hidden-xs"> Student Grade Table
+                    <small class="pull-right">Grade Average :
+                        <span class="avgGrade label label-default"></span>
+                    </small>
+                    <hr>
+                </h1>
+                <!--only show this element when the user gets to a mobile version-->
+                <h3 class="hidden-md hidden-lg hidden-xl col-xs-12">Student Grade Table
+                    <small class="pull-right">Grade Average :
+                        <span class="avgGrade label label-default"></span>
+                    </small>
+                    <hr>
+                </h3>
             </div>
-            <div class="row">
-                <div class="student-add-form form-group pull-right col-lg-4 col-xs-12">
-                    <h4>Add Student</h4>
-                    <form class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
-                        </div>
-                    </form>
-                    <form class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                            <input type="text" class="form-control" name="course" id="course" placeholder="Student Course">
-                        </div>
-                    </form>
-                    <form class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-education"></i></span>
-                            <input type="text" class="form-control" name="studentGrade" id="studentGrade" placeholder="Student Grade">                        </div>
-                    </form>
-                    <button type="button" class="btn btn-success  add" onclick="">Add</button>
-                    <button type="button" class="btn btn-default cancel" onclick="">Cancel</button>
-                    <button type="button" class="btn btn-default data">Get Data From Server</button>
-                </div>
-                <div class="student-list-container col-lg-8 col-xs-12">
-                    <table class="student-list table table-hover">
-                        <thead>
+        </div>
+        <div class="row">
+            <div class="student-add-form form-group pull-right col-md-4 col-xs-12">
+                <h4>Add Student</h4>
+                <form class="student-name form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="student-icon glyphicon glyphicon-user" data-toggle="popover" data-placement="left" data-content="Please enter a valid name"></i>
+                        </span>
+                        <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
+                    </div>
+                </form>
+                <form class="student-course form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="course-icon glyphicon glyphicon-list-alt" data-toggle="popover" data-placement="left" data-content="Please enter a valid course"></i>
+                        </span>
+                        <input type="text" class="form-control" name="course" id="course" placeholder="Student Course">
+                    </div>
+                </form>
+                <form class="student-grade form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="grade-icon glyphicon glyphicon-education" data-toggle="popover" data-placement="left" data-content="Please enter a grade between 0-100"></i>
+                        </span>
+                        <input type="text" class="form-control" name="studentGrade" id="studentGrade" placeholder="Student Grade"> </div>
+                </form>
+                <button type="button" class="btn btn-block btn-success  add">Add
+                    <span class="loading"></span>
+                </button>
+                <button type="button" class="btn btn-block btn-danger cancel">Cancel</button>
+                <button type="button" class="btn btn-block btn-info data">Get Data From Server</button>
+            </div>
+            <div class="student-list-container col-md-8 col-xs-12">
+                <table class="student-list table table-hover">
+                    <thead>
                         <tr>
                             <th>Student Name</th>
                             <th>Student Course</th>
                             <th>Student Grade</th>
                             <th>Operations</th>
                         </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <h2 class="noStudentData">
+                    No Student Data Loaded...
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="error_modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title error_modal_title">There was an error.</h4>
+                </div>
+                <div class="modal-body error_modal_message">
                 </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
 
+    <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title deleteText">Please Confirm This Delete</h3>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-student-name deleteText"></h4>
+                    <h4 class="modal-student-course deleteText"></h4>
+                    <h4 class="modal-student-grade deleteText"></h4>
+                </div>
+                <div class="modal-footer">
+                    <h5 class="deleteText pull-left modal-footer-confirmation">Are you sure you wish to delete this student?</h5>
+                    <button type="button" id="confirm-delete" class="btn btn-success">
+                        Confirm
+                        <span class="loading"></span>
+                    </button>
+                    <button type="button" class="cancel btn btn-danger" data-dismiss="modal" id="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -4,15 +4,10 @@ require_once('mysql_connect.php');
 
 $localAccess = true;
 
-$output = [
-    'success' => false,
-    'error' => [],
-];
-
 if(!$_POST['action']) {
-    console.log('$_POST ', $_POST);
-    $output['errors'][] = 'No action specified.';
-    print(json_encode($output));
+    $output['error'][] = 'No action specified.';
+    $json_output = json_encode($output);
+    print($json_output);
     exit();
 }
 
@@ -22,6 +17,9 @@ switch($_POST['action']) {
         break;
     case 'create':
         include('create.php');
+        break;
+    case 'delete':
+        include('delete.php');
         break;
     default:
         $output['errors'][] = 'invalid action';
