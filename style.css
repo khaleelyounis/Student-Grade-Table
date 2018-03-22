@@ -1,0 +1,29 @@
+body {
+    background-color: rgb(235, 241, 248);
+}
+
+.spinAnimation {
+	animation: spin 0.95s infinite linear;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.modal {
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-footer-confirmation {
+    margin-left: 5%;
+    font-weight: bold;
+}
+
+.deleteText {
+    text-align: center;
+}

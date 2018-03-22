@@ -20,11 +20,13 @@ if(!empty($result)){
         while( $row = mysqli_fetch_assoc($result)) {
             $output['data'][] = $row;
         }
+        $output['success'] = true;
     } else {
-        $output['errors'][] = 'No data available';
+        $output['error'][] = 'No data available';
+        $output['success'] = true;
     }
 } else {
-    $output['errors'][] = mysqli_error($conn);
+    $output['error'][] = 'There was an error, please try again.';
 }
 
 ?>
