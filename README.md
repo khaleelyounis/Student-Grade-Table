@@ -5,11 +5,10 @@
 - Implemented Javascript is used for the core functionality alongside jQuery for DOM manipulation and AJAX for communication with the PHP back-end.
 - Deployed a PHP back-end that uses mysqli prepared statements to safely interface with the database.
 
-![Landing Page](images/SGT.png) | ![Error Handling](images/errorhandling.png)
+![Landing Page](images/SGT.png)
 :-------------------------:|:-------------------------:
+![Delete Modal](images/deleteModal.png) | ![Error Handling](images/errorhandling.png)
 
-![Delete Modal](images/deleteModal.png) |
-:-------------------------:|:-------------------------:
 
 ## Technologies Used
 
